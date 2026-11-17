@@ -1,0 +1,11 @@
+[
+  {"id":"WIYV-2","name":"Federico Valverde","team":"Real Madrid","collection":"Panini Prizm FIFA 2025-26","category":"Panini","variant":"Paralela brillante","number":"185","price":4000,"stock":1,"featured":true},
+  {"id":"WIYV-3","name":"Marco Reus","team":"Borussia Dortmund","collection":"Topps Football's Finest – All Stars","category":"Topps","variant":"Foil verde","number":"79","price":15000,"stock":1,"featured":true},
+  {"id":"WIYV-4","name":"Erling Haaland","team":"Manchester City","collection":"Topps Chrome UEFA Champions League","category":"Topps","variant":"Chrome","number":"181","price":5000,"stock":1,"featured":false},
+  {"id":"WIYV-5","name":"Kylian Mbappé","team":"Francia","collection":"Panini Adrenalyn XL World Cup 2018","category":"Panini","variant":"Base","number":"151","price":5000,"stock":1,"featured":true},
+  {"id":"WIYV-6","name":"Vinícius Júnior","team":"Brasil / Real Madrid","collection":"Leaf Trading Cards 2024","category":"Leaf","variant":"Leaf","number":"—","price":5000,"stock":1,"featured":false},
+  {"id":"WIYV-7","name":"Erling Haaland","team":"Noruega","collection":"Panini Donruss Road to FIFA World Cup 26","category":"Panini","variant":"Base","number":"170","price":5000,"stock":1,"featured":false},
+  {"id":"WIYV-293","name":"Ronaldinho","team":"FC Barcelona","collection":"Topps","category":"Topps","variant":"Showboat","number":"—","price":8000,"stock":1,"featured":true},
+  {"id":"WIYV-294","name":"Dejan Kulusevski","team":"Suecia","collection":"Panini Donruss Road to FIFA World Cup 26","category":"Panini","variant":"Base","number":"83","price":1000,"stock":1,"featured":false},
+  {"id":"WIYV-355","name":"Mohamed Salah","team":"Liverpool FC","collection":"Topps Match Attax","category":"Topps","variant":"FWD","number":"—","price":2000,"stock":1,"featured":true}
+]
