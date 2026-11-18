@@ -12,22 +12,6 @@
 #store-app[hidden]{display:none}.nav{position:sticky;top:0;background:#050914ed;border-bottom:1px solid var(--line);padding:14px max(4vw,20px);display:flex;justify-content:space-between;align-items:center;z-index:5}.brand{font:14px 'Press Start 2P';color:white;text-decoration:none}.brand small{display:block;color:var(--gold);font-size:8px;margin-top:7px}.cartbtn,.primary,.add{background:var(--blue);color:white;border:1px solid var(--cyan);padding:11px 15px;font-weight:700;box-shadow:0 0 16px #075bff66}.hero{max-width:1150px;margin:35px auto;padding:25px;display:grid;grid-template-columns:1.3fr .7fr;gap:20px;align-items:center}.eyebrow{font:9px 'Press Start 2P';color:var(--cyan)}h1{font:clamp(28px,5vw,52px)/1.4 'Press Start 2P';text-shadow:4px 4px #0756b8}h1 em{color:var(--gold);font-style:normal}.hero p{font-size:21px;color:#bdcce1}.mascot{min-height:260px;display:grid;place-items:center;background:linear-gradient(135deg,#193967,#0c1425);border:2px solid var(--cyan);box-shadow:8px 8px #031b40;overflow:hidden}.mascot img{width:100%;height:100%;max-height:340px;object-fit:contain}.ticker{padding:12px;text-align:center;background:#0e203b;color:var(--gold);font:9px 'Press Start 2P';border-block:1px solid #164c90}main{max-width:1150px;margin:auto;padding:0 22px}.head{display:flex;justify-content:space-between;align-items:end;margin:32px 0 15px}.head h2{font:14px 'Press Start 2P';line-height:1.7}.muted{color:var(--muted)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.chip{background:var(--panel);color:#c6d7ef;border:1px solid var(--line);padding:8px 13px}.chip.active,.chip:hover{border-color:var(--cyan);background:#123e7d;color:white}.tools{display:grid;grid-template-columns:1fr 190px;gap:10px;margin-bottom:18px}.tools input,.tools select{padding:12px;background:var(--panel);color:white;border:1px solid var(--line)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.product{background:linear-gradient(155deg,#152847,#0d172a);border:1px solid var(--line);padding:12px;box-shadow:4px 4px #030916}.visual{height:190px;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(circle,#28558e,#101a30 70%);border:1px solid #365782}.visual:before{content:'';position:absolute;width:125px;height:165px;border:2px solid #8cc4ff88;transform:rotate(7deg);background:linear-gradient(140deg,#ffffff22,#07142c)}.visual span{z-index:1;font:17px 'Press Start 2P';text-shadow:3px 3px #0756b8;text-align:center}.visual img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;padding:8px}.tag{position:absolute;top:8px;left:8px;z-index:2;background:var(--gold);color:#111;padding:5px;font:8px 'Press Start 2P'}.product h3{font-size:23px;margin:12px 0 0}.product p{margin:2px 0;color:var(--muted)}.details{font-size:15px;min-height:40px;color:#afc1dc;margin-top:8px}.buy{display:flex;justify-content:space-between;align-items:center;margin-top:10px}.price{font-size:24px;color:var(--gold);font-weight:700}.add{box-shadow:none;padding:9px}.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:42px 0}.benefits div{padding:17px;background:var(--panel);border:1px solid var(--line)}.benefits b{display:block;font:9px 'Press Start 2P';color:var(--cyan);margin-bottom:10px}.footer{border-top:1px solid var(--line);padding:25px;text-align:center;color:var(--muted);background:#060a14}.shade{position:fixed;inset:0;background:#0009;z-index:9;display:none}.shade.open{display:block}.drawer{position:fixed;right:0;top:0;height:100%;width:min(420px,100%);background:#0d182b;border-left:1px solid var(--cyan);z-index:10;padding:20px;transform:translateX(110%);transition:.2s;display:flex;flex-direction:column}.drawer.open{transform:none}.drawerhead{display:flex;justify-content:space-between;align-items:center}.drawer h2,.box h2{font:12px 'Press Start 2P';line-height:1.7}.close{background:none;border:0;color:white;font-size:28px}.items{overflow:auto;flex:1}.item{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}.qty button{background:#173961;color:white;border:0;padding:3px 8px}.total{border-top:1px solid var(--line);padding:15px 0;font-size:24px;color:var(--gold);display:flex;justify-content:space-between}.modal{display:none;position:fixed;inset:0;background:#000b;z-index:12;place-items:center;padding:15px}.modal.open{display:grid}.box{background:#111e35;border:1px solid var(--cyan);padding:22px;width:min(520px,100%);max-height:90vh;overflow:auto}.box label{display:block;margin:12px 0;color:#bdcce1}.box input,.box textarea{display:block;width:100%;padding:10px;margin-top:5px;background:#071225;color:white;border:1px solid var(--line)}.notice{padding:10px;background:#17304f;color:#d5e4f8;font-size:14px}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,100px);background:var(--gold);color:#111;padding:12px;z-index:20;font-weight:bold;transition:.2s}.toast.show{transform:translate(-50%,0)}
 @media(max-width:800px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.grid{gap:9px}.product{padding:8px}.visual{height:140px}.visual span{font-size:12px}.product h3{font-size:18px}.price{font-size:19px}.add{font-size:13px;padding:7px}.tools{grid-template-columns:1fr}.benefits{grid-template-columns:1fr}.hero{margin:15px auto}.mascot{min-height:180px}.splash-enter{left:50%;top:72%;width:58%;height:14%;border-radius:14px}}
 
-/* GROK ARCADE - 16 BIT FIGHTER */
-.mascot.grok-arcade{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:5px;min-height:0;padding:9px;background:linear-gradient(180deg,#170d35,#080b20);border:3px solid #25d9ff;box-shadow:inset 0 0 0 3px #07152d,0 0 20px #075bff55;image-rendering:pixelated;font-family:'Press Start 2P',monospace}
-.arcade-top{display:flex;justify-content:space-between;color:#25d9ff;font:8px 'Press Start 2P';padding:2px 1px 5px}
-.arcade-hud{display:grid;grid-template-columns:1fr 1fr;gap:4px;align-items:center;color:#fff;font:7px 'Press Start 2P'}
-.fighter-label{display:flex;justify-content:space-between;gap:5px}.enemy-label{grid-column:2;grid-row:1}
-.health-track{height:9px;background:#3c101d;border:2px solid #d7eaff;grid-row:2;overflow:hidden}.enemy-track{grid-column:2}
-.health-fill{height:100%;width:100%;background:linear-gradient(90deg,#31f26b,#b9ff56);transition:width .12s}
-#enemy-health{margin-left:auto;background:linear-gradient(90deg,#ffb52d,#f23b55)}
-#fight-game{display:block;width:100%;height:auto;aspect-ratio:1/1;background:#17102f;image-rendering:pixelated;border:2px solid #d45aa5;touch-action:pan-y;box-shadow:0 0 16px #b12c9b66}
-.arcade-message{text-align:center;min-height:18px;color:#ffd21c;font:8px 'Press Start 2P';padding:3px}
-.arcade-actions{display:flex;gap:7px}.arcade-actions button,.arcade-controls button{border:2px solid #25d9ff;background:#09234a;color:#fff;font:8px 'Press Start 2P';padding:9px 5px;box-shadow:2px 2px #020711;touch-action:manipulation}
-.arcade-actions button{flex:1}.arcade-actions button:active,.arcade-controls button:active{background:#075bff;transform:translateY(1px)}
-.arcade-controls{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.arcade-controls button{min-height:36px;font-size:9px}
-.arcade-help{text-align:center;color:#9ebce4;font:6px/1.8 'Press Start 2P';padding:1px 0 2px}
-@media(max-width:800px){.mascot.grok-arcade{width:100%;max-width:520px;margin:0 auto}}
-@media(max-width:520px){.mascot.grok-arcade{padding:7px;gap:4px}.arcade-controls button{min-height:42px}.arcade-help{font-size:5px}}
 </style></head>
 <body>
 <section class="splash" id="splash" aria-label="Bienvenido a WizzCards Tienda de Coleccionables">
@@ -37,15 +21,7 @@
 </section>
 <div id="store-app" hidden>
 <header class="nav"><a class="brand" href="#">WIZZCARDS<small>HUNT THE RARE</small></a><button class="cartbtn" id="open">🛒 CARRITO <span id="count">0</span></button></header>
-<section class="hero"><div><div class="eyebrow">PLAYER 01 · COLECCIONA LO EXTRAORDINARIO</div><h1>HUNT<br><em>THE RARE</em></h1><p>Cartas deportivas, TCG, ediciones especiales y tesoros para verdaderos coleccionistas. Encuentra tu próxima pieza favorita.</p><a class="primary" href="#catalogo">ENTRAR A LA TIENDA ↗</a></div><div class="mascot grok-arcade" id="grok-arcade">
-<div class="arcade-top"><span>WIZZCARDS ARCADE</span><span>1P VS CPU</span></div>
-<div class="arcade-hud"><div class="fighter-label">GROK <span id="grok-score">0</span></div><div class="health-track"><div class="health-fill" id="grok-health"></div></div><div class="health-track enemy-track"><div class="health-fill" id="enemy-health"></div></div><div class="fighter-label enemy-label">RIVAL <span id="enemy-score">0</span></div></div>
-<canvas id="fight-game" width="320" height="180" aria-label="Videojuego de pelea Grok contra un rival"></canvas>
-<div class="arcade-message" id="fight-message">PULSA START PARA LUCHAR</div>
-<div class="arcade-actions"><button id="fight-start" type="button">▶ FIGHT</button><button id="fight-reset" type="button">↻ RESET</button></div>
-<div class="arcade-controls"><button data-fight="left" aria-label="Mover a la izquierda">◀</button><button data-fight="right" aria-label="Mover a la derecha">▶</button><button data-fight="block" aria-label="Defender">DEF</button><button data-fight="hit" aria-label="Golpear">HIT</button></div>
-<div class="arcade-help">PC: A / D MOVER · J GOLPE · K DEFENDER<br>CELULAR: USA LOS BOTONES</div>
-</div></section>
+<section class="hero"><div><div class="eyebrow">PLAYER 01 · COLECCIONA LO EXTRAORDINARIO</div><h1>HUNT<br><em>THE RARE</em></h1><p>Cartas deportivas, TCG, ediciones especiales y tesoros para verdaderos coleccionistas. Encuentra tu próxima pieza favorita.</p><a class="primary" href="#catalogo">ENTRAR A LA TIENDA ↗</a></div><div class="mascot"><img src="assets/Grok,%20el%20orco%20de%20capucha%20azul.png" alt="Grok, guardián del tesoro WizzCards"></div></section>
 <div class="ticker">★ WIZZCARDS · TOPPS · PANINI · LEAF · CARTAS DE FÚTBOL · HUNT THE RARE · INSERT COIN TO COLLECT ★</div>
 <main><section id="catalogo"><div class="head"><div><div class="eyebrow">SELECT YOUR GAME</div><h2>CATÁLOGO DE COLECCIONABLES</h2></div><span class="muted" id="result"></span></div><div class="chips" id="chips"></div><div class="tools"><input id="search" placeholder="Buscar jugador, equipo o colección…"><select id="sort"><option value="featured">Destacadas primero</option><option value="low">Precio menor a mayor</option><option value="high">Precio mayor a menor</option><option value="name">Nombre A–Z</option></select></div><div class="grid" id="grid"></div><p class="muted">Las imágenes de muestra son ilustrativas. Confirma disponibilidad antes de comprar.</p></section>
 <section class="benefits"><div><b>01 · CURATED LOOT</b>Cartas seleccionadas para coleccionistas.</div><div><b>02 · CHECK YOUR CART</b>Revisa cantidades y total antes de enviar.</div><div><b>03 · THE HUNT</b>Una comunidad que vive por encontrar lo raro.</div></section></main><footer class="footer">WIZZCARDS · HUNT THE RARE · CHILE · Instagram @wizzcards</footer>
@@ -59,91 +35,6 @@ const splashArt=document.querySelector('.splash-art'),enterButton=$('enter'),spl
 function positionEnterHotspot(){if(!splashArt||!enterButton||!splashStage)return;const stage=splashStage.getBoundingClientRect();const nw=splashArt.naturalWidth||1648,nh=splashArt.naturalHeight||928;const scale=Math.min(stage.width/nw,stage.height/nh);const renderedW=nw*scale,renderedH=nh*scale;const offsetX=(stage.width-renderedW)/2,offsetY=(stage.height-renderedH)/2;enterButton.style.left=(offsetX+renderedW*0.4515)+'px';enterButton.style.top=(offsetY+renderedH*0.628)+'px';enterButton.style.width=(renderedW*0.394)+'px';enterButton.style.height=(renderedH*0.166)+'px';}
 if(splashArt){if(splashArt.complete)positionEnterHotspot();else splashArt.addEventListener('load',positionEnterHotspot,{once:true});window.addEventListener('resize',positionEnterHotspot);}
 enterButton.addEventListener('click',e=>{e.preventDefault();$('splash').style.display='none';$('store-app').hidden=false;start();window.scrollTo(0,0)});
-
-// GROK ARCADE - pixel art 16-bit cabinet fight
-(function(){
-const canvas=$('fight-game');if(!canvas)return;const c=canvas.getContext('2d');c.imageSmoothingEnabled=false;
-const msg=$('fight-message'),gh=$('grok-health'),eh=$('enemy-health');
-let running=false,frame=0,last=0,raf=0,overlay='INSERT COIN',intro=0;
-const p={x:92,y:265,hp:100,face:1,attack:0,block:false,stun:0,score:0};
-const e={x:245,y:265,hp:100,face:-1,attack:0,block:false,stun:0};
-const keys={left:false,right:false,block:false};
-const px=(x,y,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(x),Math.round(y),w,h)};
-function text(t,x,y,size,col='#fff',align='left'){c.font='bold '+size+'px monospace';c.textAlign=align;c.fillStyle=col;c.fillText(t,x,y);c.textAlign='left'}
-function background(){
- px(0,0,320,320,'#17102f');
- // brickwork and purple-lit shop wall
- for(let y=8;y<205;y+=18){px(0,y,320,2,'#382253');for(let x=(y%36?0:18);x<320;x+=38)px(x,y,2,18,'#382253')}
- // window and neon skyline
- px(245,24,75,113,'#100e32');px(250,30,65,97,'#e53b9b');px(250,72,65,55,'#27235c');
- for(let i=0;i<8;i++){let x=252+i*8,h=18+(i%4)*9;px(x,119-h,5,h,'#10142f');for(let yy=124-h;yy<118;yy+=8)px(x+2,yy,2,2,'#f8bd64')}
- // WizzCards neon sign
- px(8,43,133,60,'#080d25');px(12,47,125,52,'#0754a8');px(16,51,117,44,'#14102d');
- text('WIZZCARDS',74,73,15,'#fff','center');text('HUNT THE RARE',74,91,8,'#ffe44e','center');
- // lamps and warm pools
- [[62,0],[181,0]].forEach(([x,y])=>{px(x+10,y,2,31,'#120d22');px(x+5,28,12,5,'#ffdc82');px(x,33,22,8,'#ffae45');px(x-5,41,32,3,'#ff9b43');px(x-9,45,40,2,'#a64c9a')});
- // display shelves, packs and cards
- px(248,137,67,64,'#43204c');px(244,132,76,7,'#d68b43');
- for(let row=0;row<2;row++){px(249,145+row*25,65,2,'#e0a15a');for(let col=0;col<4;col++){let x=253+col*15,y=149+row*25;px(x,y,11,17,'#f6d9b0');px(x+2,y+2,7,13,['#2d69b6','#c73d74','#35a6a0','#d8a12e'][(col+row)%4]);px(x+2,y+2,7,3,'#f7e8c1')}}
- // arcade cabinet at left
- px(3,128,56,78,'#17266a');px(0,124,62,8,'#28c9ed');px(9,139,45,29,'#080d2c');px(13,143,37,21,'#1467bf');text('WC',31,159,12,'#fff','center');px(12,172,42,6,'#e83d88');px(16,181,34,5,'#6e315d');px(20,186,4,21,'#d5a56a');px(43,186,4,21,'#d5a56a');
- // trophy
- px(205,164,28,34,'#4b244f');px(200,195,38,5,'#e7a747');px(209,137,20,18,'#ffd33d');px(204,141,6,10,'#ffd33d');px(228,141,6,10,'#ffd33d');px(216,154,6,8,'#ffd33d');
- // floor perspective
- px(0,207,320,113,'#39254e');px(0,207,320,3,'#e78b61');
- c.strokeStyle='#75436c';c.lineWidth=1;for(let x=-50;x<380;x+=40){c.beginPath();c.moveTo(160,207);c.lineTo(x,320);c.stroke()}for(let y=229;y<320;y+=22)px(0,y,320,1,'#75436c');
- // floor light and tiny tiles
- px(0,203,320,3,'#f3a05a');for(let x=8;x<320;x+=32)px(x,250+(x%3)*5,3,2,'#9d5b7a');
-}
-function orc(x,y,face,attack,block,stun){
- c.save();c.translate(Math.round(x),Math.round(y));c.scale(face,1);
- // shadow
- px(-25,2,52,5,'#100b20');
- // sneakers
- px(-23,-17,21,18,'#17213c');px(4,-17,23,18,'#17213c');px(-25,-7,23,7,'#e4e9f5');px(3,-7,26,7,'#e4e9f5');px(-20,-2,17,3,'#208ee0');px(8,-2,17,3,'#208ee0');px(-15,-19,8,3,'#fff');px(12,-19,8,3,'#fff');
- // legs, cargo pants
- px(-18,-54,15,39,'#202640');px(5,-54,16,39,'#202640');px(-19,-35,17,7,'#34304c');px(5,-32,18,7,'#34304c');px(-18,-19,13,3,'#d5a12f');px(6,-19,14,3,'#d5a12f');
- // jacket and hood
- px(-21,-105,43,55,'#101b34');px(-25,-101,9,36,'#0871ce');px(16,-101,9,36,'#0871ce');px(-18,-102,37,9,'#0871ce');px(-16,-96,33,37,'#202d4a');px(-8,-84,17,16,'#0b142a');px(-4,-74,9,4,'#e8d24a');
- // shoulders and arms
- px(-29,-101,13,19,'#0871ce');px(17,-101,13,19,'#0871ce');px(-32,-87,14,20,'#5cbd39');px(18,-87,14,20,'#5cbd39');
- if(attack){px(20,-91,24,12,'#5cbd39');px(38,-96,13,17,'#17213b');px(43,-92,8,8,'#f4cb57')}
- else if(block){px(18,-105,12,24,'#5cbd39');px(18,-118,17,14,'#17213b')}
- else{px(-35,-75,17,15,'#17213b');px(19,-75,17,15,'#17213b');px(-31,-72,10,8,'#5cbd39');px(24,-72,10,8,'#5cbd39')}
- // green orc face and blue hood
- px(-17,-143,35,37,'#56c43a');px(-22,-138,7,20,'#56c43a');px(16,-138,7,20,'#56c43a');px(-22,-150,45,12,'#075fc2');px(-25,-144,9,20,'#075fc2');px(16,-144,9,20,'#075fc2');px(-17,-153,35,6,'#25a5f2');
- // brows, eyes, tusks, beard
- px(-12,-134,10,5,'#15232a');px(4,-134,10,5,'#15232a');px(-10,-133,4,3,'#fff');px(7,-133,4,3,'#fff');px(-2,-126,8,6,'#368d2d');px(-11,-120,25,10,'#17251d');px(-8,-119,5,7,'#fff3c9');px(8,-119,5,7,'#fff3c9');px(-5,-115,15,3,'#f2dca3');
- // belt, chain, card logo
- px(-20,-55,41,5,'#d5a33e');px(-3,-54,8,4,'#fff0a0');px(-16,-49,3,12,'#8fc8ef');px(-3,-94,14,9,'#fff');px(-1,-92,10,4,'#1d3f7b');
- if(stun)px(-22,-157,43,3,'#fff');
- c.restore();
-}
-function draw(){
- background();orc(p.x,p.y,p.face,p.attack,p.block,p.stun); // rival as armored green-skinned challenger
- orc(e.x,e.y,e.face,e.attack,e.block,e.stun);
- // rival hood tint overlay on upper sprite to distinguish
- px(e.x-18,e.y-151,36,8,'#a62d67');px(e.x-22,e.y-144,6,17,'#a62d67');
- text('PLAYER 1',9,15,9,'#fff');px(9,21,124,10,'#101020');px(11,23,Math.max(0,120*p.hp/100),6,'#ffca36');
- text('INSERT COIN',310,15,9,'#fff','right');px(9,35,7,7,'#ef384d');px(19,35,7,7,'#ef384d');px(29,35,7,7,'#ef384d');
- text('CPU',310,29,7,'#ffcf4b','right');px(232,34,79,7,'#31172d');px(234,36,Math.max(0,75*e.hp/100),3,'#ef426e');
- if(p.attack)px(p.x+20,p.y-99,25,4,'#fff28b');if(e.attack)px(e.x-44,e.y-99,25,4,'#ff8cae');
- if(overlay){px(31,126,258,54,'#09071de8');px(35,130,250,46,'#24104d');text(overlay,160,162,overlay==='GAME OVER'?20:24,overlay==='GAME OVER'?'#ff5480':'#ffe44c','center')}
- gh.style.width=Math.max(0,p.hp)+'%';eh.style.width=Math.max(0,e.hp)+'%';
-}
-function finish(){running=false;overlay='GAME OVER';msg.textContent='GAME OVER · PRESS FIGHT';draw()}
-function hit(a,b){if(a.attack>0&&a.attack<5&&Math.abs(a.x-b.x)<48){if(!b.block){b.hp=Math.max(0,b.hp-10);b.stun=7}a.attack=0;if(b.hp<=0)finish()}}
-function tick(t){if(!running)return;const dt=Math.min(2,(t-last)/16.67||1);last=t;frame++;if(frame===42)overlay='';
- p.face=e.x>=p.x?1:-1;e.face=-p.face;if(keys.left)p.x=Math.max(30,p.x-2.4*dt);if(keys.right)p.x=Math.min(290,p.x+2.4*dt);p.block=keys.block;
- if(e.x>p.x+43)e.x-=1.05*dt;else if(e.x<p.x+35)e.x+=.65*dt;e.block=frame%150>118&&Math.abs(e.x-p.x)<52;if(frame%92===0&&Math.abs(e.x-p.x)<55)e.attack=9;
- if(p.attack>0)p.attack--;if(e.attack>0)e.attack--;if(p.stun>0)p.stun--;if(e.stun>0)e.stun--;hit(p,e);hit(e,p);draw();if(running)raf=requestAnimationFrame(tick)}
-function start(){cancelAnimationFrame(raf);p.x=92;p.hp=100;p.attack=0;p.stun=0;e.x=245;e.hp=100;e.attack=0;e.stun=0;p.block=e.block=false;keys.left=keys.right=keys.block=false;running=true;frame=0;overlay='FIGHT!';msg.textContent='FIGHT!';draw();last=performance.now();raf=requestAnimationFrame(tick)}
-function action(a,on){if(a==='left')keys.left=on;if(a==='right')keys.right=on;if(a==='block')keys.block=on;if(a==='hit'&&on&&running&&p.attack===0){p.attack=9;hit(p,e);draw()}}
-document.querySelectorAll('[data-fight]').forEach(b=>{const a=b.dataset.fight;b.addEventListener('pointerdown',ev=>{ev.preventDefault();action(a,true)});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>action(a,false)))});
-window.addEventListener('keydown',ev=>{if(['a','A','d','D','j','J','k','K'].includes(ev.key))ev.preventDefault();if(ev.key==='a'||ev.key==='A')action('left',true);if(ev.key==='d'||ev.key==='D')action('right',true);if(ev.key==='k'||ev.key==='K')action('block',true);if((ev.key==='j'||ev.key==='J')&&running&&p.attack===0){p.attack=9;hit(p,e);draw()}});
-window.addEventListener('keyup',ev=>{if(ev.key==='a'||ev.key==='A')action('left',false);if(ev.key==='d'||ev.key==='D')action('right',false);if(ev.key==='k'||ev.key==='K')action('block',false)});
-$('fight-start').onclick=start;$('fight-reset').onclick=start;draw();
-})();
 
 // Enlace directo para compartir la tienda sin pasar por la pantalla de bienvenida
 // La tienda siempre muestra primero la pantalla de bienvenida.
