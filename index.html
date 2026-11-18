@@ -126,7 +126,7 @@ function draw(){
 }
 function finish(){running=false;overlay='GAME OVER';msg.textContent='GAME OVER · PULSA FIGHT PARA REINTENTAR';draw()}
 function hit(a,b){if(a.attack>0&&a.attack<5&&Math.abs(a.x-b.x)<45){if(!b.block){b.hp=Math.max(0,b.hp-10);b.stun=7}a.attack=0;if(b.hp<=0)finish()}}
-function tick(t){if(!running)return;const dt=Math.min(2,(t-last)/16.67||1);last=t;frame++;
+function tick(t){if(!running)return;const dt=Math.min(2,(t-last)/16.67||1);last=t;frame++;if(frame===42)overlay='';
  p.face=e.x>=p.x?1:-1;e.face=-p.face;
  if(keys.left)p.x=Math.max(24,p.x-2.3*dt);if(keys.right)p.x=Math.min(296,p.x+2.3*dt);p.block=keys.block;
  if(e.x>p.x+38)e.x-=1.05*dt;else if(e.x<p.x+30)e.x+=.65*dt;
