@@ -12,9 +12,10 @@
 <header class="nav"><a class="brand" href="index.html">WIZZCARDS<small>HUNT THE RARE</small></a><a class="cart" href="index.html#catalogo">← CATÁLOGO</a></header>
 <main class="wrap"><a class="back" href="index.html#catalogo">← Volver al catálogo</a><div id="content"><p>Cargando carta…</p></div></main>
 <div class="zoom" id="zoom"><img id="zoom-img" alt="Vista ampliada de la carta"></div><div class="toast" id="toast">Carta agregada al carrito</div>
+<script src="supabase-config.js"></script>
 <script>
 const $=id=>document.getElementById(id),clp=n=>new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(n),id=new URLSearchParams(location.search).get('id');
-fetch('catalog.json').then(r=>r.json()).then(items=>{
+loadWizzCatalog().then(items=>{
  const p=items.find(x=>x.id===id);if(!p){$('content').innerHTML='<div class="error"><h1>No encontramos esta carta</h1><a class="back" href="index.html#catalogo">Volver a la tienda</a></div>';return}
  document.title=p.name+' | WizzCards';
  const front=p.imageFront||p.image_front,back=p.imageBack||p.image_back;

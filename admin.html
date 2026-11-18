@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050914"><title>Administración | WizzCards</title>
+<style>
+:root{--bg:#050914;--panel:#101c32;--blue:#075bff;--cyan:#25d9ff;--gold:#ffd21c;--white:#f4f7ff;--muted:#aab9d2;--line:#1e4b91}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#102d65,transparent 55%),var(--bg);color:var(--white);font:18px Arial,sans-serif}.wrap{max-width:760px;margin:40px auto;padding:20px}.brand{font-weight:900;letter-spacing:3px}.brand small{display:block;color:var(--gold);font-size:11px;margin-top:7px}.panel{margin-top:28px;padding:24px;background:linear-gradient(155deg,#152847,#0d172a);border:1px solid var(--cyan);box-shadow:0 0 28px #075bff22}h1{font-size:26px}h2{font-size:18px;color:var(--cyan)}p,.muted{color:var(--muted);line-height:1.5}label{display:block;margin:16px 0;color:#dce8fa}input{display:block;width:100%;margin-top:8px;padding:12px;background:#071225;color:white;border:1px solid var(--line);border-radius:5px}button{cursor:pointer;padding:12px 18px;background:var(--blue);color:white;border:1px solid var(--cyan);font-weight:bold;border-radius:4px}button:disabled{opacity:.5;cursor:not-allowed}.row{display:grid;grid-template-columns:1fr 1fr;gap:15px}.preview{width:100%;max-height:270px;object-fit:contain;background:#071225;border:1px solid var(--line);margin-top:10px}.status{padding:12px;background:#0b2342;border-left:3px solid var(--cyan);white-space:pre-wrap;margin-top:18px}.hidden{display:none!important}.top{display:flex;justify-content:space-between;align-items:center;gap:15px}@media(max-width:600px){.row{grid-template-columns:1fr}.wrap{margin:12px auto;padding:14px}.panel{padding:18px}}
+</style></head>
+<body><main class="wrap">
+<div class="top"><div class="brand">WIZZCARDS<small>ADMIN · HUNT THE RARE</small></div><a href="index.html" style="color:var(--cyan)">Volver a tienda ↗</a></div>
+<section class="panel" id="login-panel"><h1>Acceso administrador</h1><p>Ingresa con tu cuenta autorizada de WizzCards.</p>
+<form id="login-form"><label>Correo<input id="email" type="email" autocomplete="username" required value="wizzcardss@gmail.com"></label><label>Contraseña<input id="password" type="password" autocomplete="current-password" required></label><button type="submit">INICIAR SESIÓN</button></form></section>
+<section class="panel hidden" id="upload-panel"><div class="top"><div><h1>Fotografías de cartas</h1><p>Primera ficha: Federico Valverde · WIYV-2</p></div><button id="logout" type="button">Cerrar sesión</button></div>
+<p>Sube las fotografías originales. Puedes reemplazar una cara cargando otra imagen del mismo lado.</p>
+<div class="row"><label>FRENTE (JPEG, PNG o WEBP · máx. 5 MB)<input id="front" type="file" accept="image/jpeg,image/png,image/webp"><img id="front-preview" class="preview hidden" alt="Vista previa del frente"></label>
+<label>REVERSO (JPEG, PNG o WEBP · máx. 5 MB)<input id="back" type="file" accept="image/jpeg,image/png,image/webp"><img id="back-preview" class="preview hidden" alt="Vista previa del reverso"></label></div>
+<button id="upload" type="button">SUBIR FOTOS A SUPABASE</button><div id="status" class="status" role="status">Listo para cargar las imágenes.</div></section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
+<script>
+const CARD_ID="99ea2b00-1761-4538-b83a-dbfdb8abc2e4";
+const client=window.supabase.createClient(WIZZ_SUPABASE_URL,WIZZ_SUPABASE_PUBLISHABLE_KEY);
+const $=id=>document.getElementById(id);
+function status(message){$("status").textContent=message}
+function showSession(session){$("login-panel").classList.toggle("hidden",!!session);$("upload-panel").classList.toggle("hidden",!session)}
+async function refresh(){const {data}=await client.auth.getSession();showSession(data.session)}
+$("login-form").addEventListener("submit",async e=>{e.preventDefault();const {error}=await client.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error){alert("No se pudo iniciar sesión: "+error.message);return}await refresh()});
+$("logout").onclick=async()=>{await client.auth.signOut();showSession(null)};
+for(const side of ["front","back"]){$(side).addEventListener("change",()=>{const file=$(side).files[0],img=$(side+"-preview");if(!file){img.classList.add("hidden");return}img.src=URL.createObjectURL(file);img.classList.remove("hidden")})}
+$("upload").onclick=async()=>{const {data}=await client.auth.getSession(),session=data.session;if(!session){showSession(null);status("Tu sesión expiró. Inicia sesión nuevamente.");return}
+const files=[["front",$("front").files[0]],["back",$("back").files[0]]].filter(x=>x[1]);if(!files.length){status("Selecciona al menos una fotografía.");return}
+$("upload").disabled=true;let messages=[];
+try{for(const [side,file] of files){if(file.size>5*1024*1024)throw new Error("La imagen "+side+" supera los 5 MB.");const form=new FormData();form.append("card_id",CARD_ID);form.append("side",side);form.append("file",file);const response=await fetch(WIZZ_SUPABASE_URL+"/functions/v1/wizzcards-upload-card-image",{method:"POST",headers:{apikey:WIZZ_SUPABASE_PUBLISHABLE_KEY,Authorization:"Bearer "+session.access_token},body:form});const result=await response.json();if(!response.ok)throw new Error(result.error||"Error al subir "+side);messages.push((side==="front"?"Frente":"Reverso")+" cargado correctamente.");}
+status(messages.join("\n")+"\nLas imágenes originales quedaron guardadas en Supabase Storage.");}
+catch(error){status("No se completó la carga: "+error.message)}
+finally{$("upload").disabled=false}};
+client.auth.onAuthStateChange((_event,session)=>showSession(session));refresh();
+</script></body></html>
