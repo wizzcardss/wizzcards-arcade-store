@@ -30,7 +30,7 @@
 <script src="supabase-config.js"></script>
 <script>
 const $=id=>document.getElementById(id);let data=[],cart=JSON.parse(localStorage.getItem('wizzcart')||'{}'),category='Todas';const clp=n=>new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(n);
-const splashArt=$('.splash-art'),enterButton=$('enter'),splashStage=document.querySelector('.splash-stage');
+const splashArt=document.querySelector('.splash-art'),enterButton=$('enter'),splashStage=document.querySelector('.splash-stage');
 function positionEnterHotspot(){if(!splashArt||!enterButton||!splashStage)return;const stage=splashStage.getBoundingClientRect();const nw=splashArt.naturalWidth||1648,nh=splashArt.naturalHeight||928;const scale=Math.min(stage.width/nw,stage.height/nh);const renderedW=nw*scale,renderedH=nh*scale;const offsetX=(stage.width-renderedW)/2,offsetY=(stage.height-renderedH)/2;enterButton.style.left=(offsetX+renderedW*0.4515)+'px';enterButton.style.top=(offsetY+renderedH*0.628)+'px';enterButton.style.width=(renderedW*0.394)+'px';enterButton.style.height=(renderedH*0.166)+'px';}
 if(splashArt){if(splashArt.complete)positionEnterHotspot();else splashArt.addEventListener('load',positionEnterHotspot,{once:true});window.addEventListener('resize',positionEnterHotspot);}
 enterButton.addEventListener('click',e=>{e.preventDefault();$('splash').style.display='none';$('store-app').hidden=false;start();window.scrollTo(0,0)});
