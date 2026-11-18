@@ -11,7 +11,8 @@
 <div class="top"><div class="brand">WIZZCARDS<small>ADMIN · HUNT THE RARE</small></div><a href="index.html" style="color:var(--cyan)">Volver a tienda ↗</a></div>
 <section class="panel" id="login-panel"><h1>Acceso administrador</h1><p>Ingresa con tu cuenta autorizada de WizzCards.</p>
 <form id="login-form"><label>Correo<input id="email" type="email" autocomplete="username" required value="wizzcardss@gmail.com"></label><label>Contraseña<input id="password" type="password" autocomplete="current-password" required></label><button type="submit">INICIAR SESIÓN</button></form></section>
-<section class="panel hidden" id="upload-panel"><div class="top"><div><h1>Fotografías de cartas</h1><p>Primera ficha: Federico Valverde · WIYV-2</p></div><button id="logout" type="button">Cerrar sesión</button></div>
+<section class="panel hidden" id="upload-panel"><div class="top"><div><h1>Fotografías de cartas</h1><p>Selecciona la ficha a la que pertenecen las fotografías.</p></div><button id="logout" type="button">Cerrar sesión</button></div>
+<label>CARTA<select id="card-select"><option value="">Cargando cartas...</option></select></label><p id="card-info" class="muted"></p>
 <p>Sube las fotografías originales. Puedes reemplazar una cara cargando otra imagen del mismo lado.</p>
 <div class="row"><label>FRENTE (JPEG, PNG o WEBP · máx. 5 MB)<input id="front" type="file" accept="image/jpeg,image/png,image/webp"><img id="front-preview" class="preview hidden" alt="Vista previa del frente"></label>
 <label>REVERSO (JPEG, PNG o WEBP · máx. 5 MB)<input id="back" type="file" accept="image/jpeg,image/png,image/webp"><img id="back-preview" class="preview hidden" alt="Vista previa del reverso"></label></div>
@@ -19,19 +20,21 @@
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
 <script>
-const CARD_ID="99ea2b00-1761-4538-b83a-dbfdb8abc2e4";
 const client=window.supabase.createClient(WIZZ_SUPABASE_URL,WIZZ_SUPABASE_PUBLISHABLE_KEY);
+let selectedCardId="";
 const $=id=>document.getElementById(id);
 function status(message){$("status").textContent=message}
 function showSession(session){$("login-panel").classList.toggle("hidden",!!session);$("upload-panel").classList.toggle("hidden",!session)}
-async function refresh(){const {data}=await client.auth.getSession();showSession(data.session)}
+async function loadCards(){const select=$("card-select");select.innerHTML="<option value=\"\">Selecciona una carta...</option>";const {data,error}=await client.from("cards").select("id,title,player_name,team_name,card_number,variant,is_published").order("created_at",{ascending:false});if(error){select.innerHTML="<option value=\"\">No se pudieron cargar las cartas</option>";status("Error al listar cartas: "+error.message);return}for(const c of data||[]){const o=document.createElement("option");o.value=c.id;o.textContent=(c.player_name||c.title)+" · "+(c.team_name||"")+" · #"+(c.card_number||"—")+(c.is_published?" (Publicada)":" (Borrador)");o.dataset.info=[c.title,c.variant,c.is_published?"Publicada":"Borrador"].filter(Boolean).join(" · ");select.appendChild(o)}const match=[...select.options].find(o=>o.textContent.includes("Marco Reus"));if(match)select.value=match.value;selectedCardId=select.value;$("card-info").textContent=select.selectedOptions[0]?.dataset.info||"";}
+$("card-select").addEventListener("change",()=>{selectedCardId=$("card-select").value;$("card-info").textContent=$("card-select").selectedOptions[0]?.dataset.info||""});
+async function refresh(){const {data}=await client.auth.getSession();showSession(data.session);if(data.session)await loadCards()}
 $("login-form").addEventListener("submit",async e=>{e.preventDefault();const {error}=await client.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error){alert("No se pudo iniciar sesión: "+error.message);return}await refresh()});
 $("logout").onclick=async()=>{await client.auth.signOut();showSession(null)};
 for(const side of ["front","back"]){$(side).addEventListener("change",()=>{const file=$(side).files[0],img=$(side+"-preview");if(!file){img.classList.add("hidden");return}img.src=URL.createObjectURL(file);img.classList.remove("hidden")})}
 $("upload").onclick=async()=>{const {data}=await client.auth.getSession(),session=data.session;if(!session){showSession(null);status("Tu sesión expiró. Inicia sesión nuevamente.");return}
 const files=[["front",$("front").files[0]],["back",$("back").files[0]]].filter(x=>x[1]);if(!files.length){status("Selecciona al menos una fotografía.");return}
 $("upload").disabled=true;let messages=[];
-try{for(const [side,file] of files){if(file.size>5*1024*1024)throw new Error("La imagen "+side+" supera los 5 MB.");const form=new FormData();form.append("card_id",CARD_ID);form.append("side",side);form.append("file",file);const response=await fetch(WIZZ_SUPABASE_URL+"/functions/v1/wizzcards-upload-card-image",{method:"POST",headers:{apikey:WIZZ_SUPABASE_PUBLISHABLE_KEY,Authorization:"Bearer "+session.access_token},body:form});const result=await response.json();if(!response.ok)throw new Error(result.error||"Error al subir "+side);messages.push((side==="front"?"Frente":"Reverso")+" cargado correctamente.");}
+try{for(const [side,file] of files){if(file.size>5*1024*1024)throw new Error("La imagen "+side+" supera los 5 MB.");const form=new FormData();if(!selectedCardId)throw new Error("Selecciona primero una carta.");form.append("card_id",selectedCardId);form.append("side",side);form.append("file",file);const response=await fetch(WIZZ_SUPABASE_URL+"/functions/v1/wizzcards-upload-card-image",{method:"POST",headers:{apikey:WIZZ_SUPABASE_PUBLISHABLE_KEY,Authorization:"Bearer "+session.access_token},body:form});const result=await response.json();if(!response.ok)throw new Error(result.error||"Error al subir "+side);messages.push((side==="front"?"Frente":"Reverso")+" cargado correctamente.");}
 status(messages.join("\n")+"\nLas imágenes originales quedaron guardadas en Supabase Storage.");}
 catch(error){status("No se completó la carga: "+error.message)}
 finally{$("upload").disabled=false}};
