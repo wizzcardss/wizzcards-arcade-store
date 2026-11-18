@@ -13,14 +13,14 @@
 @media(max-width:800px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.grid{gap:9px}.product{padding:8px}.visual{height:140px}.visual span{font-size:12px}.product h3{font-size:18px}.price{font-size:19px}.add{font-size:13px;padding:7px}.tools{grid-template-columns:1fr}.benefits{grid-template-columns:1fr}.hero{margin:15px auto}.mascot{min-height:180px}.splash-enter{left:50%;top:72%;width:58%;height:14%;border-radius:14px}}
 
 /* GROK ARCADE - 16 BIT FIGHTER */
-.mascot.grok-arcade{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:5px;min-height:0;padding:9px;background:linear-gradient(180deg,#102d54,#050b18);border:3px solid #25d9ff;box-shadow:inset 0 0 0 3px #07152d,0 0 20px #075bff55;image-rendering:pixelated;font-family:'Press Start 2P',monospace}
+.mascot.grok-arcade{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:5px;min-height:0;padding:9px;background:linear-gradient(180deg,#170d35,#080b20);border:3px solid #25d9ff;box-shadow:inset 0 0 0 3px #07152d,0 0 20px #075bff55;image-rendering:pixelated;font-family:'Press Start 2P',monospace}
 .arcade-top{display:flex;justify-content:space-between;color:#25d9ff;font:8px 'Press Start 2P';padding:2px 1px 5px}
 .arcade-hud{display:grid;grid-template-columns:1fr 1fr;gap:4px;align-items:center;color:#fff;font:7px 'Press Start 2P'}
 .fighter-label{display:flex;justify-content:space-between;gap:5px}.enemy-label{grid-column:2;grid-row:1}
 .health-track{height:9px;background:#3c101d;border:2px solid #d7eaff;grid-row:2;overflow:hidden}.enemy-track{grid-column:2}
 .health-fill{height:100%;width:100%;background:linear-gradient(90deg,#31f26b,#b9ff56);transition:width .12s}
 #enemy-health{margin-left:auto;background:linear-gradient(90deg,#ffb52d,#f23b55)}
-#fight-game{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#09152d;image-rendering:pixelated;border:2px solid #416da5;touch-action:pan-y}
+#fight-game{display:block;width:100%;height:auto;aspect-ratio:1/1;background:#090d24;image-rendering:pixelated;border:2px solid #416da5;touch-action:pan-y}
 .arcade-message{text-align:center;min-height:18px;color:#ffd21c;font:8px 'Press Start 2P';padding:3px}
 .arcade-actions{display:flex;gap:7px}.arcade-actions button,.arcade-controls button{border:2px solid #25d9ff;background:#09234a;color:#fff;font:8px 'Press Start 2P';padding:9px 5px;box-shadow:2px 2px #020711;touch-action:manipulation}
 .arcade-actions button{flex:1}.arcade-actions button:active,.arcade-controls button:active{background:#075bff;transform:translateY(1px)}
@@ -42,7 +42,7 @@
 <div class="arcade-hud"><div class="fighter-label">GROK <span id="grok-score">0</span></div><div class="health-track"><div class="health-fill" id="grok-health"></div></div><div class="health-track enemy-track"><div class="health-fill" id="enemy-health"></div></div><div class="fighter-label enemy-label">RIVAL <span id="enemy-score">0</span></div></div>
 <canvas id="fight-game" width="320" height="180" aria-label="Videojuego de pelea Grok contra un rival"></canvas>
 <div class="arcade-message" id="fight-message">PULSA START PARA LUCHAR</div>
-<div class="arcade-actions"><button id="fight-start" type="button">▶ START</button><button id="fight-reset" type="button">↻ RESET</button></div>
+<div class="arcade-actions"><button id="fight-start" type="button">▶ FIGHT</button><button id="fight-reset" type="button">↻ RESET</button></div>
 <div class="arcade-controls"><button data-fight="left" aria-label="Mover a la izquierda">◀</button><button data-fight="right" aria-label="Mover a la derecha">▶</button><button data-fight="block" aria-label="Defender">DEF</button><button data-fight="hit" aria-label="Golpear">HIT</button></div>
 <div class="arcade-help">PC: A / D MOVER · J GOLPE · K DEFENDER<br>CELULAR: USA LOS BOTONES</div>
 </div></section>
@@ -60,70 +60,84 @@ function positionEnterHotspot(){if(!splashArt||!enterButton||!splashStage)return
 if(splashArt){if(splashArt.complete)positionEnterHotspot();else splashArt.addEventListener('load',positionEnterHotspot,{once:true});window.addEventListener('resize',positionEnterHotspot);}
 enterButton.addEventListener('click',e=>{e.preventDefault();$('splash').style.display='none';$('store-app').hidden=false;start();window.scrollTo(0,0)});
 
-// GROK ARCADE: 16-bit one-versus-one prototype
+// GROK ARCADE: 16-bit retro fighting game, WizzCards shop stage
 (function(){
-const canvas=$('fight-game');if(!canvas)return;
-const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
+const canvas=$('fight-game');if(!canvas)return;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
 const msg=$('fight-message'),gh=$('grok-health'),eh=$('enemy-health');
-let running=false,ended=false,frame=0,last=0,raf=0;
-const p={x:55,y:132,hp:100,face:1,attack:0,block:false,stun:0,score:0};
-const e={x:258,y:132,hp:100,face:-1,attack:0,block:false,stun:0,score:0};
+let running=false,frame=0,last=0,raf=0,overlay='INSERT COIN';
+const p={x:83,y:260,hp:100,face:1,attack:0,block:false,stun:0,score:0};
+const e={x:240,y:260,hp:100,face:-1,attack:0,block:false,stun:0,score:0};
 const keys={left:false,right:false,block:false};
-function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
-function fighter(x,y,face,isGrok,attack,block,stun){
- const skin=isGrok?'#62c94c':'#d58a58',hood=isGrok?'#0874d5':'#8b294e',dark='#10182c',armor=isGrok?'#254f9b':'#59304f';
- ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(face,1);
- // shadow
- rect(-12,2,25,4,'#030711');
- // boots and legs
- rect(-9,-12,8,13,dark);rect(2,-12,8,13,dark);rect(-11,-2,11,4,'#27324b');rect(1,-2,12,4,'#27324b');
- // torso
- rect(-10,-34,21,23,armor);rect(-13,-31,5,13,skin);rect(9,-31,5,13,skin);
- // belt
- rect(-10,-15,21,4,'#d5a62c');
- // head + hood
- rect(-10,-52,20,18,skin);rect(-13,-55,25,8,hood);rect(-13,-48,5,13,hood);rect(8,-48,5,13,hood);
- if(isGrok){rect(-6,-45,4,3,'#fff');rect(4,-45,4,3,'#fff');rect(-3,-38,9,3,'#291b18');rect(1,-39,3,4,'#fff')}
- else {rect(-6,-45,4,3,'#ffeb76');rect(4,-45,4,3,'#ffeb76');rect(-4,-37,9,3,'#32121f')}
- // arms
- if(attack>0){rect(8,-32,15,7,skin);rect(20,-34,7,11,'#e5bd78')}
- else if(block){rect(5,-34,7,18,skin);rect(8,-43,8,8,skin)}
- else {rect(7,-32,7,15,skin);rect(-14,-31,7,14,skin)}
- if(stun>0)rect(-14,-58,28,3,'#fff2a6');
- ctx.restore();
-}
+function r(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
+function txt(t,x,y,size=8,color='#fff',align='left'){ctx.font='bold '+size+'px monospace';ctx.textAlign=align;ctx.fillStyle=color;ctx.fillText(t,x,y);ctx.textAlign='left'}
 function scene(){
- rect(0,0,320,180,'#101d42');
- for(let i=0;i<7;i++){rect(i*48,35,30,85,i%2?'#172d58':'#1c3766');rect(i*48+8,45,14,35,'#254b78')}
- rect(0,118,320,62,'#25365a');rect(0,118,320,4,'#6ca1c9');
- for(let i=0;i<320;i+=16)rect(i,151,8,2,'#40577a');
- rect(0,0,320,5,'#25d9ff');rect(0,5,320,2,'#075bff');
- // arcade background lights
- rect(18,22,3,3,'#ffd21c');rect(298,22,3,3,'#ffd21c');
+ r(0,0,320,320,'#171039');
+ // purple brick wall
+ for(let y=10;y<194;y+=18){r(0,y,320,2,'#38205f');for(let x=(y%36?0:18);x<320;x+=38)r(x,y,2,18,'#38205f')}
+ // neon night window
+ r(244,25,76,100,'#201b61');r(250,31,64,87,'#e13c9b');r(250,75,64,43,'#292b78');
+ for(let i=0;i<7;i++){let x=254+i*9;r(x,54-(i%3)*8,5,25+(i%3)*8,'#101a42');r(x+1,58-(i%3)*8,2,2,'#ffe67a')}
+ // sign
+ r(10,42,120,59,'#07132c');r(13,45,114,53,'#075bba');r(16,48,108,47,'#11102f');
+ txt('WIZZCARDS',70,68,13,'#fff','center');txt('HUNT THE RARE',70,85,7,'#ffe43d','center');
+ // hanging lamps
+ r(62,0,2,25,'#111');r(59,24,9,3,'#ffd16c');r(54,27,20,8,'#ffb642');r(49,35,30,5,'#ff8c39');
+ r(182,0,2,25,'#111');r(179,24,9,3,'#ffd16c');r(174,27,20,8,'#ffb642');r(169,35,30,5,'#ff8c39');
+ // card display shelves
+ r(250,132,62,62,'#442451');r(246,128,70,7,'#d78b3b');
+ for(let y=139;y<187;y+=22){r(251,y,60,2,'#d18b51');for(let x=255;x<307;x+=15){r(x,y+3,10,15,'#f4d9b4');r(x+2,y+5,6,11,'#3156a3');r(x+2,y+5,6,3,'#e94a70')}}
+ // arcade machine
+ r(5,129,54,74,'#15256a');r(2,125,59,8,'#25d9ff');r(11,139,43,26,'#11102f');r(15,143,35,18,'#1160c2');txt('WC',32,157,10,'#fff','center');r(12,169,42,5,'#ec3e88');r(15,179,34,5,'#54234e');r(19,184,4,22,'#d7b17c');r(41,184,4,22,'#d7b17c');
+ // trophy pedestal
+ r(203,158,28,36,'#43244e');r(199,194,36,5,'#d28b3e');r(208,136,18,15,'#ffca39');r(204,139,5,9,'#ffca39');r(225,139,5,9,'#ffca39');r(214,151,6,7,'#ffca39');
+ // floor perspective
+ r(0,206,320,114,'#35234e');r(0,206,320,4,'#a15d82');
+ for(let x=-40;x<380;x+=40){ctx.beginPath();ctx.moveTo(160,206);ctx.lineTo(x,320);ctx.strokeStyle='#71406b';ctx.lineWidth=1;ctx.stroke()}
+ for(let y=225;y<320;y+=23)r(0,y,320,2,'#71406b');
+ // floor glow
+ r(0,202,320,3,'#f4a04a');
+}
+function fighter(x,y,face,grok,attack,block,stun){
+ ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(face,1);
+ const green=grok?'#58d83d':'#d18a55',hood=grok?'#0865c7':'#9c285e',armor=grok?'#172e50':'#532b51';
+ // shadow, shoes, legs
+ r(-19,1,40,5,'#100b22');r(-14,-25,12,27,'#22233e');r(3,-25,12,27,'#22233e');r(-18,-4,17,6,'#d7e6f4');r(1,-4,19,6,'#d7e6f4');r(-17,2,18,3,'#3d9ce9');r(2,2,19,3,'#3d9ce9');
+ // body and hoodie
+ r(-17,-67,34,43,armor);r(-21,-65,6,26,green);r(15,-65,7,26,green);r(-17,-62,34,5,hood);r(-12,-53,24,22,'#10192f');r(-5,-44,12,3,'#e8d45c');
+ // head hood, ears
+ r(-16,-96,32,30,green);r(-21,-91,7,16,green);r(14,-91,7,16,green);r(-18,-103,36,10,hood);r(-20,-98,7,17,hood);r(13,-98,7,17,hood);
+ // brows, eyes, nose, beard/teeth
+ r(-10,-87,7,4,'#fff');r(4,-87,7,4,'#fff');r(-8,-86,3,3,'#15152b');r(6,-86,3,3,'#15152b');r(-2,-79,5,5,'#2f8b31');r(-9,-74,18,7,'#1b241d');r(-6,-72,12,3,'#f6f1d0');
+ // arms and gloves
+ if(attack>0){r(13,-64,22,10,green);r(30,-68,13,15,'#171b32');r(35,-65,7,7,'#f3d16d')}
+ else if(block){r(12,-68,10,22,green);r(12,-84,15,12,'#171b32')}
+ else{r(13,-64,9,20,green);r(-22,-64,9,20,green);r(-24,-49,14,12,'#171b32');r(13,-49,14,12,'#171b32')}
+ // belt + chain
+ r(-17,-28,34,5,'#d9a63a');r(-3,-26,7,3,'#fff0a4');r(-15,-23,3,10,'#9ac7ff');
+ if(stun>0){r(-18,-108,36,3,'#fff');}
+ ctx.restore();
 }
 function draw(){
  scene();fighter(p.x,p.y,p.face,true,p.attack,p.block,p.stun);fighter(e.x,e.y,e.face,false,e.attack,e.block,e.stun);
- if(p.attack>0){rect(p.x+10,91,18,3,'#fff0a8')}if(e.attack>0){rect(e.x-29,91,18,3,'#ffb4a0')}
- ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.fillText('ROUND 1',137,18);
+ if(p.attack>0)r(p.x+16,p.y-67,22,4,'#fff17a');if(e.attack>0)r(e.x-38,e.y-67,22,4,'#ff8cba');
+ txt('ROUND 1',160,18,8,'#fff','center');
+ if(overlay){r(32,119,256,48,'#08091dcc');r(36,123,248,40,'#24104a');txt(overlay,160,150,22,overlay==='GAME OVER'?'#ff4d79':'#ffe34d','center')}
  gh.style.width=Math.max(0,p.hp)+'%';eh.style.width=Math.max(0,e.hp)+'%';
 }
-function finish(winner){running=false;ended=true;msg.textContent=winner==='p'?'¡GROK GANA! +1 VICTORIA':'¡RIVAL GANA! INTENTA OTRA VEZ';if(winner==='p'){p.score++;$('grok-score').textContent=p.score}else{e.score++;$('enemy-score').textContent=e.score}}
-function hit(attacker,target){if(attacker.attack>0&&attacker.attack<5&&Math.abs(attacker.x-target.x)<39&&Math.abs(attacker.y-target.y)<20){if(!target.block){target.hp=Math.max(0,target.hp-9);target.stun=5}attacker.attack=0;if(target.hp<=0)finish(attacker===p?'p':'e')}}
+function finish(){running=false;overlay='GAME OVER';msg.textContent='GAME OVER · PULSA FIGHT PARA REINTENTAR';draw()}
+function hit(a,b){if(a.attack>0&&a.attack<5&&Math.abs(a.x-b.x)<45){if(!b.block){b.hp=Math.max(0,b.hp-10);b.stun=7}a.attack=0;if(b.hp<=0)finish()}}
 function tick(t){if(!running)return;const dt=Math.min(2,(t-last)/16.67||1);last=t;frame++;
  p.face=e.x>=p.x?1:-1;e.face=-p.face;
- if(keys.left)p.x=Math.max(18,p.x-2.1*dt);if(keys.right)p.x=Math.min(302,p.x+2.1*dt);
- p.block=keys.block;
- if(e.x>p.x+34)e.x-=1.0*dt;else if(e.x<p.x+25)e.x+=.7*dt;
- e.block=frame%170>128&&Math.abs(e.x-p.x)<40;
- if(frame%105===0&&Math.abs(e.x-p.x)<48)e.attack=8;
+ if(keys.left)p.x=Math.max(24,p.x-2.3*dt);if(keys.right)p.x=Math.min(296,p.x+2.3*dt);p.block=keys.block;
+ if(e.x>p.x+38)e.x-=1.05*dt;else if(e.x<p.x+30)e.x+=.65*dt;
+ e.block=frame%145>115&&Math.abs(e.x-p.x)<50;if(frame%95===0&&Math.abs(e.x-p.x)<52)e.attack=9;
  if(p.attack>0)p.attack--;if(e.attack>0)e.attack--;if(p.stun>0)p.stun--;if(e.stun>0)e.stun--;
- hit(p,e);hit(e,p);
- draw();if(running)raf=requestAnimationFrame(tick);
+ hit(p,e);hit(e,p);draw();if(running)raf=requestAnimationFrame(tick);
 }
-function start(){cancelAnimationFrame(raf);p.x=55;p.hp=100;p.attack=0;p.stun=0;e.x=258;e.hp=100;e.attack=0;e.stun=0;p.block=e.block=false;keys.left=keys.right=keys.block=false;running=true;ended=false;frame=0;msg.textContent='¡PELEA!';draw();last=performance.now();raf=requestAnimationFrame(tick)}
-function action(a,on){if(a==='left')keys.left=on;if(a==='right')keys.right=on;if(a==='block')keys.block=on;if(a==='hit'&&on&&running&&p.attack===0){p.attack=8;hit(p,e);draw()}}
+function start(){cancelAnimationFrame(raf);p.x=83;p.hp=100;p.attack=0;p.stun=0;e.x=240;e.hp=100;e.attack=0;e.stun=0;p.block=e.block=false;keys.left=keys.right=keys.block=false;running=true;frame=0;overlay='FIGHT!';msg.textContent='FIGHT!';draw();last=performance.now();raf=requestAnimationFrame(tick)}
+function action(a,on){if(a==='left')keys.left=on;if(a==='right')keys.right=on;if(a==='block')keys.block=on;if(a==='hit'&&on&&running&&p.attack===0){p.attack=9;hit(p,e);draw()}}
 document.querySelectorAll('[data-fight]').forEach(b=>{const a=b.dataset.fight;b.addEventListener('pointerdown',ev=>{ev.preventDefault();action(a,true)});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>action(a,false)))});
-window.addEventListener('keydown',ev=>{if(['a','A','d','D','j','J','k','K'].includes(ev.key))ev.preventDefault();if(ev.key==='a'||ev.key==='A')action('left',true);if(ev.key==='d'||ev.key==='D')action('right',true);if(ev.key==='k'||ev.key==='K')action('block',true);if((ev.key==='j'||ev.key==='J')&&running&&p.attack===0){p.attack=8;hit(p,e);draw()}});
+window.addEventListener('keydown',ev=>{if(['a','A','d','D','j','J','k','K'].includes(ev.key))ev.preventDefault();if(ev.key==='a'||ev.key==='A')action('left',true);if(ev.key==='d'||ev.key==='D')action('right',true);if(ev.key==='k'||ev.key==='K')action('block',true);if((ev.key==='j'||ev.key==='J')&&running&&p.attack===0){p.attack=9;hit(p,e);draw()}});
 window.addEventListener('keyup',ev=>{if(ev.key==='a'||ev.key==='A')action('left',false);if(ev.key==='d'||ev.key==='D')action('right',false);if(ev.key==='k'||ev.key==='K')action('block',false)});
 $('fight-start').onclick=start;$('fight-reset').onclick=start;draw();
 })();
