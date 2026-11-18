@@ -20,7 +20,7 @@
 .health-track{height:9px;background:#3c101d;border:2px solid #d7eaff;grid-row:2;overflow:hidden}.enemy-track{grid-column:2}
 .health-fill{height:100%;width:100%;background:linear-gradient(90deg,#31f26b,#b9ff56);transition:width .12s}
 #enemy-health{margin-left:auto;background:linear-gradient(90deg,#ffb52d,#f23b55)}
-#fight-game{display:block;width:100%;height:auto;aspect-ratio:1/1;background:#090d24;image-rendering:pixelated;border:2px solid #416da5;touch-action:pan-y}
+#fight-game{display:block;width:100%;height:auto;aspect-ratio:1/1;background:#17102f;image-rendering:pixelated;border:2px solid #d45aa5;touch-action:pan-y;box-shadow:0 0 16px #b12c9b66}
 .arcade-message{text-align:center;min-height:18px;color:#ffd21c;font:8px 'Press Start 2P';padding:3px}
 .arcade-actions{display:flex;gap:7px}.arcade-actions button,.arcade-controls button{border:2px solid #25d9ff;background:#09234a;color:#fff;font:8px 'Press Start 2P';padding:9px 5px;box-shadow:2px 2px #020711;touch-action:manipulation}
 .arcade-actions button{flex:1}.arcade-actions button:active,.arcade-controls button:active{background:#075bff;transform:translateY(1px)}
@@ -60,81 +60,84 @@ function positionEnterHotspot(){if(!splashArt||!enterButton||!splashStage)return
 if(splashArt){if(splashArt.complete)positionEnterHotspot();else splashArt.addEventListener('load',positionEnterHotspot,{once:true});window.addEventListener('resize',positionEnterHotspot);}
 enterButton.addEventListener('click',e=>{e.preventDefault();$('splash').style.display='none';$('store-app').hidden=false;start();window.scrollTo(0,0)});
 
-// GROK ARCADE: 16-bit retro fighting game, WizzCards shop stage
+// GROK ARCADE - pixel art 16-bit cabinet fight
 (function(){
-const canvas=$('fight-game');if(!canvas)return;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
+const canvas=$('fight-game');if(!canvas)return;const c=canvas.getContext('2d');c.imageSmoothingEnabled=false;
 const msg=$('fight-message'),gh=$('grok-health'),eh=$('enemy-health');
-let running=false,frame=0,last=0,raf=0,overlay='INSERT COIN';
-const p={x:83,y:260,hp:100,face:1,attack:0,block:false,stun:0,score:0};
-const e={x:240,y:260,hp:100,face:-1,attack:0,block:false,stun:0,score:0};
+let running=false,frame=0,last=0,raf=0,overlay='INSERT COIN',intro=0;
+const p={x:92,y:265,hp:100,face:1,attack:0,block:false,stun:0,score:0};
+const e={x:245,y:265,hp:100,face:-1,attack:0,block:false,stun:0};
 const keys={left:false,right:false,block:false};
-function r(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
-function txt(t,x,y,size=8,color='#fff',align='left'){ctx.font='bold '+size+'px monospace';ctx.textAlign=align;ctx.fillStyle=color;ctx.fillText(t,x,y);ctx.textAlign='left'}
-function scene(){
- r(0,0,320,320,'#171039');
- // purple brick wall
- for(let y=10;y<194;y+=18){r(0,y,320,2,'#38205f');for(let x=(y%36?0:18);x<320;x+=38)r(x,y,2,18,'#38205f')}
- // neon night window
- r(244,25,76,100,'#201b61');r(250,31,64,87,'#e13c9b');r(250,75,64,43,'#292b78');
- for(let i=0;i<7;i++){let x=254+i*9;r(x,54-(i%3)*8,5,25+(i%3)*8,'#101a42');r(x+1,58-(i%3)*8,2,2,'#ffe67a')}
- // sign
- r(10,42,120,59,'#07132c');r(13,45,114,53,'#075bba');r(16,48,108,47,'#11102f');
- txt('WIZZCARDS',70,68,13,'#fff','center');txt('HUNT THE RARE',70,85,7,'#ffe43d','center');
- // hanging lamps
- r(62,0,2,25,'#111');r(59,24,9,3,'#ffd16c');r(54,27,20,8,'#ffb642');r(49,35,30,5,'#ff8c39');
- r(182,0,2,25,'#111');r(179,24,9,3,'#ffd16c');r(174,27,20,8,'#ffb642');r(169,35,30,5,'#ff8c39');
- // card display shelves
- r(250,132,62,62,'#442451');r(246,128,70,7,'#d78b3b');
- for(let y=139;y<187;y+=22){r(251,y,60,2,'#d18b51');for(let x=255;x<307;x+=15){r(x,y+3,10,15,'#f4d9b4');r(x+2,y+5,6,11,'#3156a3');r(x+2,y+5,6,3,'#e94a70')}}
- // arcade machine
- r(5,129,54,74,'#15256a');r(2,125,59,8,'#25d9ff');r(11,139,43,26,'#11102f');r(15,143,35,18,'#1160c2');txt('WC',32,157,10,'#fff','center');r(12,169,42,5,'#ec3e88');r(15,179,34,5,'#54234e');r(19,184,4,22,'#d7b17c');r(41,184,4,22,'#d7b17c');
- // trophy pedestal
- r(203,158,28,36,'#43244e');r(199,194,36,5,'#d28b3e');r(208,136,18,15,'#ffca39');r(204,139,5,9,'#ffca39');r(225,139,5,9,'#ffca39');r(214,151,6,7,'#ffca39');
+const px=(x,y,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(x),Math.round(y),w,h)};
+function text(t,x,y,size,col='#fff',align='left'){c.font='bold '+size+'px monospace';c.textAlign=align;c.fillStyle=col;c.fillText(t,x,y);c.textAlign='left'}
+function background(){
+ px(0,0,320,320,'#17102f');
+ // brickwork and purple-lit shop wall
+ for(let y=8;y<205;y+=18){px(0,y,320,2,'#382253');for(let x=(y%36?0:18);x<320;x+=38)px(x,y,2,18,'#382253')}
+ // window and neon skyline
+ px(245,24,75,113,'#100e32');px(250,30,65,97,'#e53b9b');px(250,72,65,55,'#27235c');
+ for(let i=0;i<8;i++){let x=252+i*8,h=18+(i%4)*9;px(x,119-h,5,h,'#10142f');for(let yy=124-h;yy<118;yy+=8)px(x+2,yy,2,2,'#f8bd64')}
+ // WizzCards neon sign
+ px(8,43,133,60,'#080d25');px(12,47,125,52,'#0754a8');px(16,51,117,44,'#14102d');
+ text('WIZZCARDS',74,73,15,'#fff','center');text('HUNT THE RARE',74,91,8,'#ffe44e','center');
+ // lamps and warm pools
+ [[62,0],[181,0]].forEach(([x,y])=>{px(x+10,y,2,31,'#120d22');px(x+5,28,12,5,'#ffdc82');px(x,33,22,8,'#ffae45');px(x-5,41,32,3,'#ff9b43');px(x-9,45,40,2,'#a64c9a')});
+ // display shelves, packs and cards
+ px(248,137,67,64,'#43204c');px(244,132,76,7,'#d68b43');
+ for(let row=0;row<2;row++){px(249,145+row*25,65,2,'#e0a15a');for(let col=0;col<4;col++){let x=253+col*15,y=149+row*25;px(x,y,11,17,'#f6d9b0');px(x+2,y+2,7,13,['#2d69b6','#c73d74','#35a6a0','#d8a12e'][(col+row)%4]);px(x+2,y+2,7,3,'#f7e8c1')}}
+ // arcade cabinet at left
+ px(3,128,56,78,'#17266a');px(0,124,62,8,'#28c9ed');px(9,139,45,29,'#080d2c');px(13,143,37,21,'#1467bf');text('WC',31,159,12,'#fff','center');px(12,172,42,6,'#e83d88');px(16,181,34,5,'#6e315d');px(20,186,4,21,'#d5a56a');px(43,186,4,21,'#d5a56a');
+ // trophy
+ px(205,164,28,34,'#4b244f');px(200,195,38,5,'#e7a747');px(209,137,20,18,'#ffd33d');px(204,141,6,10,'#ffd33d');px(228,141,6,10,'#ffd33d');px(216,154,6,8,'#ffd33d');
  // floor perspective
- r(0,206,320,114,'#35234e');r(0,206,320,4,'#a15d82');
- for(let x=-40;x<380;x+=40){ctx.beginPath();ctx.moveTo(160,206);ctx.lineTo(x,320);ctx.strokeStyle='#71406b';ctx.lineWidth=1;ctx.stroke()}
- for(let y=225;y<320;y+=23)r(0,y,320,2,'#71406b');
- // floor glow
- r(0,202,320,3,'#f4a04a');
+ px(0,207,320,113,'#39254e');px(0,207,320,3,'#e78b61');
+ c.strokeStyle='#75436c';c.lineWidth=1;for(let x=-50;x<380;x+=40){c.beginPath();c.moveTo(160,207);c.lineTo(x,320);c.stroke()}for(let y=229;y<320;y+=22)px(0,y,320,1,'#75436c');
+ // floor light and tiny tiles
+ px(0,203,320,3,'#f3a05a');for(let x=8;x<320;x+=32)px(x,250+(x%3)*5,3,2,'#9d5b7a');
 }
-function fighter(x,y,face,grok,attack,block,stun){
- ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(face,1);
- const green=grok?'#58d83d':'#d18a55',hood=grok?'#0865c7':'#9c285e',armor=grok?'#172e50':'#532b51';
- // shadow, shoes, legs
- r(-19,1,40,5,'#100b22');r(-14,-25,12,27,'#22233e');r(3,-25,12,27,'#22233e');r(-18,-4,17,6,'#d7e6f4');r(1,-4,19,6,'#d7e6f4');r(-17,2,18,3,'#3d9ce9');r(2,2,19,3,'#3d9ce9');
- // body and hoodie
- r(-17,-67,34,43,armor);r(-21,-65,6,26,green);r(15,-65,7,26,green);r(-17,-62,34,5,hood);r(-12,-53,24,22,'#10192f');r(-5,-44,12,3,'#e8d45c');
- // head hood, ears
- r(-16,-96,32,30,green);r(-21,-91,7,16,green);r(14,-91,7,16,green);r(-18,-103,36,10,hood);r(-20,-98,7,17,hood);r(13,-98,7,17,hood);
- // brows, eyes, nose, beard/teeth
- r(-10,-87,7,4,'#fff');r(4,-87,7,4,'#fff');r(-8,-86,3,3,'#15152b');r(6,-86,3,3,'#15152b');r(-2,-79,5,5,'#2f8b31');r(-9,-74,18,7,'#1b241d');r(-6,-72,12,3,'#f6f1d0');
- // arms and gloves
- if(attack>0){r(13,-64,22,10,green);r(30,-68,13,15,'#171b32');r(35,-65,7,7,'#f3d16d')}
- else if(block){r(12,-68,10,22,green);r(12,-84,15,12,'#171b32')}
- else{r(13,-64,9,20,green);r(-22,-64,9,20,green);r(-24,-49,14,12,'#171b32');r(13,-49,14,12,'#171b32')}
- // belt + chain
- r(-17,-28,34,5,'#d9a63a');r(-3,-26,7,3,'#fff0a4');r(-15,-23,3,10,'#9ac7ff');
- if(stun>0){r(-18,-108,36,3,'#fff');}
- ctx.restore();
+function orc(x,y,face,attack,block,stun){
+ c.save();c.translate(Math.round(x),Math.round(y));c.scale(face,1);
+ // shadow
+ px(-25,2,52,5,'#100b20');
+ // sneakers
+ px(-23,-17,21,18,'#17213c');px(4,-17,23,18,'#17213c');px(-25,-7,23,7,'#e4e9f5');px(3,-7,26,7,'#e4e9f5');px(-20,-2,17,3,'#208ee0');px(8,-2,17,3,'#208ee0');px(-15,-19,8,3,'#fff');px(12,-19,8,3,'#fff');
+ // legs, cargo pants
+ px(-18,-54,15,39,'#202640');px(5,-54,16,39,'#202640');px(-19,-35,17,7,'#34304c');px(5,-32,18,7,'#34304c');px(-18,-19,13,3,'#d5a12f');px(6,-19,14,3,'#d5a12f');
+ // jacket and hood
+ px(-21,-105,43,55,'#101b34');px(-25,-101,9,36,'#0871ce');px(16,-101,9,36,'#0871ce');px(-18,-102,37,9,'#0871ce');px(-16,-96,33,37,'#202d4a');px(-8,-84,17,16,'#0b142a');px(-4,-74,9,4,'#e8d24a');
+ // shoulders and arms
+ px(-29,-101,13,19,'#0871ce');px(17,-101,13,19,'#0871ce');px(-32,-87,14,20,'#5cbd39');px(18,-87,14,20,'#5cbd39');
+ if(attack){px(20,-91,24,12,'#5cbd39');px(38,-96,13,17,'#17213b');px(43,-92,8,8,'#f4cb57')}
+ else if(block){px(18,-105,12,24,'#5cbd39');px(18,-118,17,14,'#17213b')}
+ else{px(-35,-75,17,15,'#17213b');px(19,-75,17,15,'#17213b');px(-31,-72,10,8,'#5cbd39');px(24,-72,10,8,'#5cbd39')}
+ // green orc face and blue hood
+ px(-17,-143,35,37,'#56c43a');px(-22,-138,7,20,'#56c43a');px(16,-138,7,20,'#56c43a');px(-22,-150,45,12,'#075fc2');px(-25,-144,9,20,'#075fc2');px(16,-144,9,20,'#075fc2');px(-17,-153,35,6,'#25a5f2');
+ // brows, eyes, tusks, beard
+ px(-12,-134,10,5,'#15232a');px(4,-134,10,5,'#15232a');px(-10,-133,4,3,'#fff');px(7,-133,4,3,'#fff');px(-2,-126,8,6,'#368d2d');px(-11,-120,25,10,'#17251d');px(-8,-119,5,7,'#fff3c9');px(8,-119,5,7,'#fff3c9');px(-5,-115,15,3,'#f2dca3');
+ // belt, chain, card logo
+ px(-20,-55,41,5,'#d5a33e');px(-3,-54,8,4,'#fff0a0');px(-16,-49,3,12,'#8fc8ef');px(-3,-94,14,9,'#fff');px(-1,-92,10,4,'#1d3f7b');
+ if(stun)px(-22,-157,43,3,'#fff');
+ c.restore();
 }
 function draw(){
- scene();fighter(p.x,p.y,p.face,true,p.attack,p.block,p.stun);fighter(e.x,e.y,e.face,false,e.attack,e.block,e.stun);
- if(p.attack>0)r(p.x+16,p.y-67,22,4,'#fff17a');if(e.attack>0)r(e.x-38,e.y-67,22,4,'#ff8cba');
- txt('ROUND 1',160,18,8,'#fff','center');
- if(overlay){r(32,119,256,48,'#08091dcc');r(36,123,248,40,'#24104a');txt(overlay,160,150,22,overlay==='GAME OVER'?'#ff4d79':'#ffe34d','center')}
+ background();orc(p.x,p.y,p.face,p.attack,p.block,p.stun); // rival as armored green-skinned challenger
+ orc(e.x,e.y,e.face,e.attack,e.block,e.stun);
+ // rival hood tint overlay on upper sprite to distinguish
+ px(e.x-18,e.y-151,36,8,'#a62d67');px(e.x-22,e.y-144,6,17,'#a62d67');
+ text('PLAYER 1',9,15,9,'#fff');px(9,21,124,10,'#101020');px(11,23,Math.max(0,120*p.hp/100),6,'#ffca36');
+ text('INSERT COIN',310,15,9,'#fff','right');px(9,35,7,7,'#ef384d');px(19,35,7,7,'#ef384d');px(29,35,7,7,'#ef384d');
+ text('CPU',310,29,7,'#ffcf4b','right');px(232,34,79,7,'#31172d');px(234,36,Math.max(0,75*e.hp/100),3,'#ef426e');
+ if(p.attack)px(p.x+20,p.y-99,25,4,'#fff28b');if(e.attack)px(e.x-44,e.y-99,25,4,'#ff8cae');
+ if(overlay){px(31,126,258,54,'#09071de8');px(35,130,250,46,'#24104d');text(overlay,160,162,overlay==='GAME OVER'?20:24,overlay==='GAME OVER'?'#ff5480':'#ffe44c','center')}
  gh.style.width=Math.max(0,p.hp)+'%';eh.style.width=Math.max(0,e.hp)+'%';
 }
-function finish(){running=false;overlay='GAME OVER';msg.textContent='GAME OVER · PULSA FIGHT PARA REINTENTAR';draw()}
-function hit(a,b){if(a.attack>0&&a.attack<5&&Math.abs(a.x-b.x)<45){if(!b.block){b.hp=Math.max(0,b.hp-10);b.stun=7}a.attack=0;if(b.hp<=0)finish()}}
+function finish(){running=false;overlay='GAME OVER';msg.textContent='GAME OVER · PRESS FIGHT';draw()}
+function hit(a,b){if(a.attack>0&&a.attack<5&&Math.abs(a.x-b.x)<48){if(!b.block){b.hp=Math.max(0,b.hp-10);b.stun=7}a.attack=0;if(b.hp<=0)finish()}}
 function tick(t){if(!running)return;const dt=Math.min(2,(t-last)/16.67||1);last=t;frame++;if(frame===42)overlay='';
- p.face=e.x>=p.x?1:-1;e.face=-p.face;
- if(keys.left)p.x=Math.max(24,p.x-2.3*dt);if(keys.right)p.x=Math.min(296,p.x+2.3*dt);p.block=keys.block;
- if(e.x>p.x+38)e.x-=1.05*dt;else if(e.x<p.x+30)e.x+=.65*dt;
- e.block=frame%145>115&&Math.abs(e.x-p.x)<50;if(frame%95===0&&Math.abs(e.x-p.x)<52)e.attack=9;
- if(p.attack>0)p.attack--;if(e.attack>0)e.attack--;if(p.stun>0)p.stun--;if(e.stun>0)e.stun--;
- hit(p,e);hit(e,p);draw();if(running)raf=requestAnimationFrame(tick);
-}
-function start(){cancelAnimationFrame(raf);p.x=83;p.hp=100;p.attack=0;p.stun=0;e.x=240;e.hp=100;e.attack=0;e.stun=0;p.block=e.block=false;keys.left=keys.right=keys.block=false;running=true;frame=0;overlay='FIGHT!';msg.textContent='FIGHT!';draw();last=performance.now();raf=requestAnimationFrame(tick)}
+ p.face=e.x>=p.x?1:-1;e.face=-p.face;if(keys.left)p.x=Math.max(30,p.x-2.4*dt);if(keys.right)p.x=Math.min(290,p.x+2.4*dt);p.block=keys.block;
+ if(e.x>p.x+43)e.x-=1.05*dt;else if(e.x<p.x+35)e.x+=.65*dt;e.block=frame%150>118&&Math.abs(e.x-p.x)<52;if(frame%92===0&&Math.abs(e.x-p.x)<55)e.attack=9;
+ if(p.attack>0)p.attack--;if(e.attack>0)e.attack--;if(p.stun>0)p.stun--;if(e.stun>0)e.stun--;hit(p,e);hit(e,p);draw();if(running)raf=requestAnimationFrame(tick)}
+function start(){cancelAnimationFrame(raf);p.x=92;p.hp=100;p.attack=0;p.stun=0;e.x=245;e.hp=100;e.attack=0;e.stun=0;p.block=e.block=false;keys.left=keys.right=keys.block=false;running=true;frame=0;overlay='FIGHT!';msg.textContent='FIGHT!';draw();last=performance.now();raf=requestAnimationFrame(tick)}
 function action(a,on){if(a==='left')keys.left=on;if(a==='right')keys.right=on;if(a==='block')keys.block=on;if(a==='hit'&&on&&running&&p.attack===0){p.attack=9;hit(p,e);draw()}}
 document.querySelectorAll('[data-fight]').forEach(b=>{const a=b.dataset.fight;b.addEventListener('pointerdown',ev=>{ev.preventDefault();action(a,true)});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>action(a,false)))});
 window.addEventListener('keydown',ev=>{if(['a','A','d','D','j','J','k','K'].includes(ev.key))ev.preventDefault();if(ev.key==='a'||ev.key==='A')action('left',true);if(ev.key==='d'||ev.key==='D')action('right',true);if(ev.key==='k'||ev.key==='K')action('block',true);if((ev.key==='j'||ev.key==='J')&&running&&p.attack===0){p.attack=9;hit(p,e);draw()}});
