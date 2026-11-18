@@ -25,4 +25,16 @@ loadWizzCatalog().then(items=>{
  $('add').onclick=()=>{let cart=JSON.parse(localStorage.getItem('wizzcart')||'{}');cart[p.id]=(cart[p.id]||0)+1;localStorage.setItem('wizzcart',JSON.stringify(cart));$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1700)};
 }).catch(()=>$('content').innerHTML='<p>No pudimos cargar el detalle. Intenta nuevamente.</p>');
 $('zoom').onclick=()=>$('zoom').classList.remove('open');
-</script></body></html>
+</script>
+<script>
+// Volver a la página desde la que se abrió la publicación; si se abrió directamente, ir al catálogo.
+document.querySelectorAll('a.back, .nav a.cart').forEach(link=>{
+  link.addEventListener('click',event=>{
+    event.preventDefault();
+    const sameSiteReferrer=(()=>{try{return !!document.referrer && new URL(document.referrer).origin===location.origin}catch{return false}})();
+    if(history.length>1 && sameSiteReferrer) history.back();
+    else location.href='index.html#catalogo';
+  });
+});
+</script>
+</body></html>
