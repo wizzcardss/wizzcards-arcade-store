@@ -47,7 +47,7 @@ async function loadWizzCatalog() {
           variant: card.variant || "Base",
           number: card.card_number || card.serial_number || "—",
           price: Number(card.sale_price_clp || 0),
-          stock: inventoryRow ? Number(inventoryRow.quantity_available ?? 1) : 1,
+          stock: inventoryRow ? Math.max(0, Number(inventoryRow.quantity_available ?? 0) - Number(inventoryRow.quantity_reserved ?? 0)) : 0,
           featured: Boolean(card.is_featured),
           description: card.description || "",
           imageFront: photos[0] || null,
@@ -67,4 +67,33 @@ async function loadWizzCatalog() {
       return response.json();
     });
   }
+}
+
+
+// Always verify the live database stock before adding or submitting a cart.
+// Missing inventory rows and cards outside the published database are treated as unavailable.
+async function getWizzStockSnapshot(cardIds) {
+  const ids = [...new Set((cardIds || []).map(String))];
+  const result = Object.fromEntries(ids.map(id => [id, 0]));
+  if (!ids.length) return result;
+  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (ids.some(id => !uuid.test(id))) return result;
+  const params = new URLSearchParams({
+    select: "card_id,quantity_available,quantity_reserved,cards!inner(is_published)",
+    card_id: "in.(" + ids.join(",") + ")",
+    "cards.is_published": "eq.true"
+  });
+  const response = await fetch(WIZZ_SUPABASE_URL + "/rest/v1/inventory?" + params.toString(), {
+    headers: {
+      apikey: WIZZ_SUPABASE_PUBLISHABLE_KEY,
+      Authorization: "Bearer " + WIZZ_SUPABASE_PUBLISHABLE_KEY
+    },
+    cache: "no-store"
+  });
+  if (!response.ok) throw new Error("No se pudo verificar el inventario (" + response.status + ")");
+  const rows = await response.json();
+  rows.forEach(row => {
+    result[row.card_id] = Math.max(0, Number(row.quantity_available || 0) - Number(row.quantity_reserved || 0));
+  });
+  return result;
 }
