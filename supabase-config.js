@@ -17,7 +17,7 @@ async function loadWizzCatalog() {
   };
   try {
     const params = new URLSearchParams({
-      select: "id,title,player_name,team_name,card_number,variant,serial_number,sale_price_clp,is_featured,description,categories(name),collections(name,brand),card_images(storage_path,alt_text,display_order)",
+      select: "id,title,player_name,team_name,card_number,variant,serial_number,sale_price_clp,is_featured,description,categories(name),collections(name,brand),card_images(storage_path,alt_text,display_order),inventory(quantity_available)",
       is_published: "eq.true",
       order: "created_at.desc"
     });
@@ -46,7 +46,7 @@ async function loadWizzCatalog() {
           variant: card.variant || "Base",
           number: card.card_number || card.serial_number || "—",
           price: Number(card.sale_price_clp || 0),
-          stock: null,
+          stock: Number(card.inventory?.[0]?.quantity_available ?? 0),
           featured: Boolean(card.is_featured),
           description: card.description || "",
           imageFront: photos[0] || null,
