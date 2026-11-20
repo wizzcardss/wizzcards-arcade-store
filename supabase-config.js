@@ -32,6 +32,7 @@ async function loadWizzCatalog() {
     const rows = await response.json();
     if (Array.isArray(rows) && rows.length > 0) {
       return rows.map(card => {
+        const inventoryRow = Array.isArray(card.inventory) ? card.inventory[0] : card.inventory;
         const photos = (card.card_images || [])
           .slice()
           .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
@@ -46,7 +47,7 @@ async function loadWizzCatalog() {
           variant: card.variant || "Base",
           number: card.card_number || card.serial_number || "—",
           price: Number(card.sale_price_clp || 0),
-          stock: Number(card.inventory?.[0]?.quantity_available ?? 0),
+          stock: inventoryRow ? Number(inventoryRow.quantity_available ?? 1) : 1,
           featured: Boolean(card.is_featured),
           description: card.description || "",
           imageFront: photos[0] || null,
