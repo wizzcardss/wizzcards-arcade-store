@@ -67,7 +67,7 @@ $('generate').onclick=async()=>{
  if(!await syncCartStock(true))return;
  const firstName=$('buyer').value.trim(),lastName=$('surname').value.trim(),phone=$('phone').value.trim(),email=$('email').value.trim(),city=$('city').value.trim(),notes=$('notes').value.trim();
  if(!firstName||!lastName||!phone||!email){notify('Completa nombre, apellido, teléfono y correo');return}
- if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){notify('Escribe un correo electrónico válido');return}
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){notify('Escribe un correo electrónico válido');return}
  const items=Object.entries(cart).filter(([id,q])=>q>0).map(([id,quantity])=>({id,quantity}));
  if(!items.length){notify('Tu carrito está vacío');return}
  const button=$('generate');button.disabled=true;button.textContent='ENVIANDO SOLICITUD…';
