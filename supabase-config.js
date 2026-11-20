@@ -17,7 +17,7 @@ async function loadWizzCatalog() {
   };
   try {
     const params = new URLSearchParams({
-      select: "id,title,player_name,team_name,card_number,variant,serial_number,sale_price_clp,is_featured,description,categories(name),collections(name,brand),card_images(storage_path,alt_text,display_order),inventory(quantity_available)",
+      select: "id,title,player_name,team_name,card_number,variant,serial_number,sale_price_clp,is_featured,description,categories(name),collections(name,brand),card_images(storage_path,alt_text,display_order),inventory(quantity_available),inventory(quantity_available)",
       is_published: "eq.true",
       order: "created_at.desc"
     });
