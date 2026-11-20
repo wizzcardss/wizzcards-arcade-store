@@ -28,7 +28,7 @@
 <div class="shade" id="shade"></div><aside class="drawer" id="drawer"><div class="drawerhead"><h2>PLAYER CART</h2><button class="close" id="close">×</button></div><div class="items" id="items"></div><div class="total"><b>TOTAL</b><b id="total">$0</b></div><button class="primary" id="checkout">CONTINUAR PEDIDO</button><p class="muted">Pedido sujeto a confirmación de stock, entrega y pago.</p></aside>
 <div class="modal" id="modal"><div class="box"><div class="drawerhead"><h2>FINALIZAR PEDIDO</h2><button class="close" id="x">×</button></div><p class="notice">Completa tus datos. Se generará el detalle para enviarlo a WizzCards.</p><label>Nombre<input id="buyer" placeholder="Tu nombre"></label><label>WhatsApp<input id="phone" placeholder="+56 9…"></label><label>Comuna / ciudad<input id="city" placeholder="Ej. Puente Alto"></label><label>Comentarios<textarea id="notes" rows="2"></textarea></label><button class="primary" id="generate">GENERAR PEDIDO</button><div id="output"></div></div></div><div class="toast" id="toast">Carta agregada</div>
 </div>
-<script src="supabase-config.js"></script>
+<script src="supabase-config.js?v=20261120b"></script>
 <script>
 const $=id=>document.getElementById(id);let data=[],cart=JSON.parse(localStorage.getItem('wizzcart')||'{}'),category='Todas';const clp=n=>new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(n);
 const splashArt=document.querySelector('.splash-art'),enterButton=$('enter'),splashStage=document.querySelector('.splash-stage');
