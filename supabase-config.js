@@ -47,7 +47,7 @@ async function loadWizzCatalog() {
           variant: card.variant || "Base",
           number: card.card_number || card.serial_number || "—",
           price: Number(card.sale_price_clp || 0),
-          stock: inventoryRow ? Math.max(0, Number(inventoryRow.quantity_available ?? 0) - Number(inventoryRow.quantity_reserved ?? 0)) : 0,
+          stock: inventoryRow ? Math.max(0, Number(inventoryRow.quantity_available ?? 0)) : 0,
           featured: Boolean(card.is_featured),
           description: card.description || "",
           imageFront: photos[0] || null,
@@ -93,7 +93,7 @@ async function getWizzStockSnapshot(cardIds) {
   if (!response.ok) throw new Error("No se pudo verificar el inventario (" + response.status + ")");
   const rows = await response.json();
   rows.forEach(row => {
-    result[row.card_id] = Math.max(0, Number(row.quantity_available || 0) - Number(row.quantity_reserved || 0));
+    result[row.card_id] = Math.max(0, Number(row.quantity_available || 0));
   });
   return result;
 }
